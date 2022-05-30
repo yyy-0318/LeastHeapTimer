@@ -25,6 +25,6 @@ public class TimeTask : ITimer
     /// </summary>
     public bool Cancel()
     {
-        return false;
+        return TimerManager.Instance.RemoveTimer(this);
     }
 }

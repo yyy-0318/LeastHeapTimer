@@ -56,6 +56,27 @@ public class TimerManager : SingletonBehaviour<TimerManager>
         HeapInsert(m_TimerTaskList.Count - 1);
         return timeTask;
     }
+    public bool RemoveTimer(ITimer timer)
+    {
+        for (int i = 0; i < m_TimerTaskList.Count; i++)
+        {
+            if (m_TimerTaskList[i] == timer)
+            {
+                if (i == m_TimerTaskList.Count-1)
+                {
+                    m_TimerTaskList.RemoveAt(m_TimerTaskList.Count - 1);
+                }
+                else
+                {
+                    Swap(i, m_TimerTaskList.Count - 1);
+                    m_TimerTaskList.RemoveAt(m_TimerTaskList.Count - 1);
+                    UpdateHeap(i);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
     void Remove()
     {
         if (m_TimerTaskList.Count == 1)
@@ -66,12 +87,11 @@ public class TimerManager : SingletonBehaviour<TimerManager>
         Swap(0, m_TimerTaskList.Count - 1);
         m_TimerTaskList.RemoveAt(m_TimerTaskList.Count - 1);
 
-        UpdateHeap();
+        UpdateHeap(0);
     }
-    void UpdateHeap()
+    void UpdateHeap(int least)
     {
-        int count = m_TimerTaskList.Count;
-        int least = 0;
+        int count = m_TimerTaskList.Count;        
         while (true)
         {
             int left = 2 * least + 1;
